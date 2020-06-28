@@ -48,6 +48,5 @@ commands:
     actions:
       - workdir: '.'
         type: exec
-        command: >-
-          apk update && apk add docker-compose && cd ${CHE_PROJECTS_ROOT}/co-change-analysis && sh run.sh && exit 0
+        command: apk update && apk add docker-compose && cd ${CHE_PROJECTS_ROOT}/co-change-analysis && sh run.sh && exit 0
         component: docker
