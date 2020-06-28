@@ -1,7 +1,7 @@
 metadata:
   name: AI4SE
 projects:
-  - name: co-change_analysis
+  - name: expert-recommender
     source:
       location: 'git@code.siemens.com:teamrse/ai4se/co-changeanalysis.git'
       type: git  
@@ -39,16 +39,19 @@ components:
                     env:
                       - name: DOCKER_TLS_CERTDIR
                         value: ''
+
     type: kubernetes
     alias: docker
 apiVersion: 1.0.0    
-  commands:
-    - name: start_ui
-      actions:
-        - workdir: '.'
-          type: exec
-          command: >-
-            apk update && apk add docker-compose && cd ${CHE_PROJECTS_ROOT}/co-change_analysis && sh run.sh && exit 0
-          component: docker  
+commands:
+  - name: start_ui
+    actions:
+      - workdir: '.'
+        type: exec
+        command: >-
+          apk update && apk add docker-compose && cd ${CHE_PROJECTS_ROOT}/co-change-analysis && sh run.sh && exit 0
+        component: docker  
+     
+          
        
   
