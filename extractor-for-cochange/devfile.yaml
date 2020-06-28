@@ -3,7 +3,7 @@ metadata:
   projects:
     - name: co-change
       source:
-        location: git@code.siemens.com:teamrse/ai4se/git-commit-data-extractor-for-cochange.git
+        location: 'git@code.siemens.com:teamrse/ai4se/git-commit-data-extractor-for-cochange.git'
         type: git
         branch: master
    components:
