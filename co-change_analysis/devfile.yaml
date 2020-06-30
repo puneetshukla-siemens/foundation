@@ -36,7 +36,6 @@ components:
 
     type: kubernetes
     alias: docker
-    memoryLimit: 512Mi
 apiVersion: 1.0.0    
 commands:
   - name: start_ui
