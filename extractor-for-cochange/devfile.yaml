@@ -1,17 +1,21 @@
 metadata:
   name: AI4SE
 projects:
-  - name: co-change
+  - name: git-commit-data-extractor-for-cochange
     source:
-      location: 'git@code.siemens.com:teamrse/ai4se/git-commit-data-extractor-for-cochange.git'
-      type: git  
+      location: git@code.siemens.com:teamrse/ai4se/git-commit-data-extractor-for-cochange.git
+      type: git
 components:      
   - id: eclipse/che-machine-exec-plugin/latest
     type: chePlugin
-  - alias: theia-editor
-    type: cheEditor
-    id: eclipse/che-theia/next    
+  - id: ms-python/python/latest
     memoryLimit: 512Mi
+    type: chePlugin
+  - mountSources: true
+    memoryLimit: 512Mi
+    type: dockerimage
+    alias: python
+    image: 'docker.artifactory.int.idevops.de/che/python-run:latest'
   - id: ms-kubernetes-tools/vscode-kubernetes-tools/latest
     type: chePlugin
   - mountSources: true
@@ -21,14 +25,14 @@ components:
         - apiVersion: extensions/v1beta1
           kind: Deployment
           metadata:
-            name: docker-dind
+            name: mydevops
             namespace: che
           spec:
             replicas: 1
             template:
               metadata:
                 labels:
-                  app: docker-dind
+                  app: mydevops
               spec:
                 containers:
                   - name: docker
@@ -39,15 +43,14 @@ components:
                     env:
                       - name: DOCKER_TLS_CERTDIR
                         value: ''
+
     type: kubernetes
     alias: docker
 apiVersion: 1.0.0    
 commands:
-  - name: start_ui
+  - name: start
     actions:
-      - workdir: '.'
+      - workdir: '${CHE_PROJECTS_ROOT}/git-commit-data-extractor-for-cochange/'
         type: exec
-        command: >-
-          apk update && apk add docker-compose && cd ${CHE_PROJECTS_ROOT}/co-change && sh run.sh && exit 0
+        command: apk update && apk add docker-compose && cd ${CHE_PROJECTS_ROOT}/git-commit-data-extractor-for-cochange && docker login docker.siemens.com -u puneet.shukla@siemens.com -p xJbqFW41cfPbgyFiUyQ4 && docker-compose up && exit 0
         component: docker
- 
