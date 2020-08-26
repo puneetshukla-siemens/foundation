@@ -11,7 +11,7 @@ components:
   - alias: theia-editor
     type: cheEditor
     id: eclipse/che-theia/next    
-    memoryLimit: 512Mi
+    memoryLimit: 1Gi
   - id: ms-kubernetes-tools/vscode-kubernetes-tools/latest
     type: chePlugin
   - mountSources: true
