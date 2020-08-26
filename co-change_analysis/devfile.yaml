@@ -6,12 +6,14 @@ projects:
       location: 'git@code.siemens.com:teamrse/ai4se/co-changeanalysis.git'
       type: git  
 components:
-  - id: eclipse/che-machine-exec-plugin/latest
+  - alias: exec-plugin
     type: chePlugin
+    id: eclipse/che-machine-exec-plugin/0.0.1
+    memoryLimit: 1Gi
   - alias: theia-editor
     type: cheEditor
     id: eclipse/che-theia/next    
-    memoryLimit: 1Gi
+    memoryLimit: 2Gi
   - id: ms-kubernetes-tools/vscode-kubernetes-tools/latest
     type: chePlugin
   - mountSources: true
