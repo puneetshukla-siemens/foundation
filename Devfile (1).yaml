@@ -1,0 +1,78 @@
+apiVersion: 1.0.0
+metadata:
+  name: python-demo-m9hfb
+projects:
+  - name: test-project
+    source:
+      location: 'https://oauth2:CSC-zTGHSGbwsL_ZEnwiFJ4r@code.siemens.com/idevops/eaas/components/eaas.git'
+      type: git
+      branch: master
+  - name: environment
+    source:
+      location: 'https://oauth2:CSC-zTGHSGbwsL_ZEnwiFJ4r@code.siemens.com/amrit.verma/environment.git'
+      type: git
+      branch: master
+  - name: python-flask-docker
+    source:
+      location: 'https://oauth2:CSC-zTGHSGbwsL_ZEnwiFJ4r@code.siemens.com/amrit.verma/python-flask-docker.git'
+      type: git
+      branch: master
+components:
+  - id: ms-python/python/latest
+    memoryLimit: 512Mi
+    type: chePlugin
+  - id: eclipse/che-machine-exec-plugin/latest
+    type: chePlugin
+  - id: ms-kubernetes-tools/vscode-kubernetes-tools/latest
+    type: chePlugin
+  - mountSources: true
+    memoryLimit: 512Mi
+    type: dockerimage
+    image: 'docker.artifactory.int.idevops.de/che/python-run:latest'
+    alias: python
+  - mountSources: true
+    referenceContent: |
+      kind: List
+      items:
+        - apiVersion: extensions/v1beta1
+          kind: Deployment
+          metadata:
+            name: docker-dind
+            namespace: che
+          spec:
+            replicas: 1
+            template:
+              metadata:
+                labels:
+                  app: docker-dind
+              spec:
+                containers:
+                  - name: docker
+                    image: docker:dind
+                    securityContext:
+                      runAsUser: 0
+                      privileged: true
+                    env:
+                      - name: DOCKER_TLS_CERTDIR
+                        value: ''
+    type: kubernetes
+    alias: docker
+commands:
+  - name: test
+    actions:
+      - workdir: '${CHE_PROJECTS_ROOT}/python-flask-docker'
+        type: exec
+        command: tox
+        component: python
+  - name: build and run
+    actions:
+      - workdir: '${CHE_PROJECTS_ROOT}/python-flask-docker'
+        type: exec
+        command: 'docker build -t myapp . && docker run --rm -p 0.0.0.0:5000:5000 myapp && exit 0'
+        component: docker
+  - name: init workspace
+    actions:
+      - workdir: '${CHE_PROJECTS_ROOT}'
+        type: exec
+        command: sh /projects/environment/che/init.sh
+        component: python
